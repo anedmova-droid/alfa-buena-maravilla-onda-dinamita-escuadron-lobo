@@ -4,6 +4,6 @@ Garcia Galindo Melissa
 
 Martinez Molina Karen
 
-Montoya Garcia Angel Eduardo
+Montoya Vazquez Angel Eduardo
 
 Vazquez Garcia Mauricio Alexis
