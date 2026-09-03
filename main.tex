@@ -1,0 +1,221 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{enumitem}
+
+\title{
+    \Large \textbf{Facultad de Ciencias} \\[0.3em]
+    \large \textsc{Manejo de Datos} \\[1.5em]
+    \LARGE \textbf{Buenas Prácticas, POO y Principios SOLID en Python} \\[0.5em]
+    \Large Tarea 1
+}
+\author{
+    \textbf{Autores:} \\[0.5em]
+    García Galindo Melissa \\
+    Martínez Molina Karen \\
+    Montoya García Ángel Eduardo \\
+    Vázquez García Mauricio Alexis
+}
+\date{Fecha de entrega: 8 de Septiembre del 2026}
+
+\begin{document}
+\maketitle
+\newpage
+
+\section{Investigación}
+
+\subsection{Parte A - PEP 8}
+PEP 8 (\textit{Python Enhancement Proposal 8}) se refiere a una guía de convenciones estilísticas a seguir para escribir código en python, que van desde conocer el tamaño máximo para las lineas de código, propuestas en como nombrar a las variables, volver el código legible, entre otras cosas. Incluso existen \textbf{linters} (herramientas que analizan el código de forma automática para detectar errores o malas practicas) y \textbf{autoformatters} (herramientas que pueden reescribir código o indicar nuestros errores) que podemos usar en caso de no recordar todas las convenciones al escribir código. A continuación colocamos 10 ejemplos donde se puedan visualizar las aplicaciones de estas convenciones al código:
+
+\begin{enumerate}
+    \item \textbf{Indentación consistente de 4 espacios} \\
+    \textbf{Principio:} Emplear exactamente 4 espacios por nivel de anidación. No utilizar tabuladores ni mezclar tabuladores con espacios.
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+def calcular_area(base, altura):
+  area = (base * altura) / 2
+        return area
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+def calcular_area(base, altura):
+    area = (base * altura) / 2
+    return area
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Longitud máxima de línea (79 caracteres)} \\
+    \textbf{Principio:} Limitar todas las líneas de código a un máximo de 79 caracteres para evitar el desplazamiento horizontal y permitir la lectura simultánea de múltiples archivos.
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+def calcular_prima(suma_asegurada, factor_edad, descuento_no_fumador, recargo_extra):
+    return (suma_asegurada * factor_edad / 1000) - descuento_no_fumador + recargo_extra
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+def calcular_prima(suma_asegurada, factor_edad, 
+                   descuento_no_fumador, recargo_extra):
+    prima_base = (suma_asegurada * factor_edad) / 1000
+    return prima_base - descuento_no_fumador + recargo_extra
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Líneas en blanco para separación de estructuras} \\
+    \textbf{Principio:} Separar funciones globales y clases de nivel superior con dos líneas en blanco. Separar métodos internos de una clase con una sola línea en blanco.
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+class Asegurado:
+    def __init__(self, edad):
+        self.edad = edad
+    def es_mayor(self):
+        return self.edad >= 18
+def funcion_auxiliar():
+    pass
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+class Asegurado:
+    def __init__(self, edad):
+        self.edad = edad
+
+    def es_mayor(self):
+        return self.edad >= 18
+
+
+def funcion_auxiliar():
+    pass
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Organización y orden de importaciones} \\
+    \textbf{Principio:} Cada import debe residir en una línea independiente al inicio del archivo, agrupados en tres bloques: biblioteca estándar, librerías de terceros y módulos locales.
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+import sys, os, math
+from aseguradora.modelos import Asegurado
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+import os
+import sys
+
+from aseguradora.modelos import Asegurado
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Espacios en blanco en expresiones y sentencias} \\
+    \textbf{Principio:} Rodear operadores binarios (asignación, aritméticos, relacionales) con un espacio a cada lado, pero evitar espacios inmediatamente dentro de paréntesis, corchetes o llaves.
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+x=5
+resultado = ( x * 2 ) + [ 1, 2, 3 ][ 0 ]
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+x = 5
+resultado = (x * 2) + [1, 2, 3][0]
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Convenciones de nomenclatura (\textit{Naming Conventions})} \\
+    \textbf{Principio:} Utilizar \texttt{snake\_case} para funciones y variables, \texttt{PascalCase} (o \textit{CapWords}) para nombres de clases, y \texttt{UPPER\_SNAKE\_CASE} para constantes globales.
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+tasa_cambio = 21.13
+class factor_edad:
+    def CalcularFactor(self, EdadAsegurado):
+        pass
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+TASA_CAMBIO = 21.13
+
+class FactorEdad:
+    def calcular_factor(self, edad_asegurado):
+        pass
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Comparaciones de identidad con \texttt{None}} \\
+    \textbf{Principio:} Las comparaciones con valores únicos singleton como \texttt{None} deben efectuarse siempre empleando operadores de identidad (\texttt{is} o \texttt{is not}), jamás mediante igualdad de valor (\texttt{==}).
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+if valor == None:
+    inicializar_variable()
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+if valor is None:
+    inicializar_variable()
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Comprobaciones implícitas de verdad booleana} \\
+    \textbf{Principio:} No comparar directamente secuencias vacías o valores booleanos contra \texttt{True} o \texttt{False}; evaluar la secuencia directamente por su valor de verdad intrínseco.
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+if len(lista_palabras) == 0:
+    return None
+if es_fumador == True:
+    aplicar_recargo()
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+if not lista_palabras:
+    return None
+if es_fumador:
+    aplicar_recargo()
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Manejo explícito de excepciones} \\
+    \textbf{Principio:} Evitar el uso de cláusulas \texttt{except:} vacías que atrapen \texttt{BaseException} (incluyendo señales de terminación del sistema). Especificar la excepción concreta esperada.
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+try:
+    edad = int(input("Edad: "))
+except:
+    print("Error al procesar.")
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+try:
+    edad = int(input("Edad: "))
+except ValueError:
+    print("Error: Ingrese un número entero válido.")
+\end{verbatim}
+    \end{itemize}
+
+    \item \textbf{Espacios alrededor de argumentos por defecto} \\
+    \textbf{Principio:} No utilizar espacios alrededor del signo \texttt{=} cuando se definan valores por defecto en argumentos de funciones o al pasar argumentos por palabra clave (\textit{kwargs}).
+    \begin{itemize}
+        \item \textit{Incorrecto:}
+\begin{verbatim}
+def normalizar_texto(texto, remover_acentos = True):
+    return texto.strip()
+\end{verbatim}
+        \item \textit{Correcto:}
+\begin{verbatim}
+def normalizar_texto(texto, remover_acentos=True):
+    return texto.strip()
+\end{verbatim}
+    \end{itemize}
+\end{enumerate}
+
+\newpage
+\subsection{Parte B -- Principios de Diseño Orientado a Objetos (SOLID)}
+
+
+\subsection{Referencias Consultadas}
+
+\end{document}
