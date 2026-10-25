@@ -1,0 +1,31 @@
+# Complejidad temporal: O(n)
+# Complejidad espacial: O(n)
+# Justificación: Se hacen solo dos recorridos simples por la lista (uno de ida y otro de vuelta), 
+# por lo que el tiempo es lineal. Se usa una lista extra para guardar las respuestas finales.
+
+class Solution(object):
+    def productExceptSelf(self, nums):
+        total_elementos = len(nums)
+        
+        # Esta es nuestra "libreta" donde anotaremos las respuestas finales
+        respuestas = [1] * total_elementos
+        
+        # PRIMER PASEO: De izquierda a derecha
+        # Vamos guardando el producto de todos los números que van quedando a nuestra espalda
+        acumulado_izquierdo = 1
+        for posicion in range(total_elementos):
+            # Anotamos lo que llevamos acumulado antes de llegar al número actual
+            respuestas[posicion] = acumulado_izquierdo
+            # Actualizamos el acumulado multiplicándolo por el número actual para el siguiente paso
+            acumulado_izquierdo = acumulado_izquierdo * nums[posicion]
+            
+        # SEGUNDO PASEO: De derecha a izquierda (de regreso)
+        # Hacemos lo mismo, pero viniendo desde el final de la fila
+        acumulado_derecho = 1
+        for posicion in range(total_elementos - 1, -1, -1):
+            # Multiplicamos lo que ya teníamos anotado por el acumulado que traemos de la derecha
+            respuestas[posicion] = respuestas[posicion] * acumulado_derecho
+            # Actualizamos el acumulado multiplicándolo por el número actual
+            acumulado_derecho = acumulado_derecho * nums[posicion]
+            
+        return respuestas
