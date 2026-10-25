@@ -1,0 +1,29 @@
+# Complejidad temporal:  O(n)
+# Complejidad espacial: O(k)
+# Justificación:  se utiliza una cola doblemente terminada (deque) monótona decreciente 
+# donde cada índice ingresa y sale a lo sumo una vez, permitiendo obtener el máximo de la ventana en O(1).
+
+from collections import deque
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        q = deque()  # Guardará los índices
+        resultado = []
+
+        for i, num in enumerate(nums):
+            # Eliminar elementos menores al actual por la derecha (mantener orden decreciente)
+            while q and nums[q[-1]] <= num:
+                q.pop()
+            
+            # Agregar el índice actual
+            q.append(i)
+
+            # Eliminar el índice si ya quedó fuera del límite izquierdo de la ventana
+            if q[0] <= i - k:
+                q.popleft()
+
+            # Guardar el máximo de la ventana una vez que alcanza el tamaño k
+            if i >= k - 1:
+                resultado.append(nums[q[0]])
+
+        return resultado
