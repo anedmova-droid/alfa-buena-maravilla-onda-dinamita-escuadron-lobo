@@ -1,0 +1,35 @@
+# Complejidad temporal: O(n * m)
+# Complejidad espacial: O(n * m)
+# Justificación: Se recorre la lista de 'n' correos, y para cada uno se aplican expresiones 
+# regulares que analizan la longitud 'm' del texto. Utilizamos un conjunto (set) para guardar 
+# los resultados, el cual, en el peor escenario, almacenará los 'n' correos completos en memoria.
+
+import re
+
+class Solution(object):
+    def numUniqueEmails(self, emails):
+        # Usamos un conjunto (set) porque es como una caja que rechaza los elementos duplicados automáticamente
+        correos_unicos = set()
+        
+        for correo_actual in emails:
+            # Separamos el nombre y el dominio justo donde está la arroba '@'
+            partes = re.split(r'@', correo_actual)
+            nombre_local = partes[0]
+            dominio = partes[1]
+            
+            # Regla 1: Todo lo que va después del '+' en el nombre local se ignora.
+            # Le decimos a re.sub: "Busca un '+' y todo lo que le siga (.*), y reemplázalo por nada ('')"
+            nombre_local_sin_plus = re.sub(r'\+.*', '', nombre_local)
+            
+            # Regla 2: Los puntos '.' en el nombre local se ignoran.
+            # Le decimos a re.sub: "Busca los puntos (\. con barra porque es caracter especial) y bórralos"
+            nombre_local_limpio = re.sub(r'\.', '', nombre_local_sin_plus)
+            
+            # Volvemos a unir el nombre ya limpio con su dominio original
+            correo_final = nombre_local_limpio + "@" + dominio
+            
+            # Lo guardamos en nuestro conjunto
+            correos_unicos.add(correo_final)
+            
+        # El tamaño del conjunto nos dirá cuántos correos diferentes quedaron
+        return len(correos_unicos)
