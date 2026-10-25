@@ -1,0 +1,32 @@
+# Complejidad temporal: O(n log n)
+# Complejidad espacial: O(n)
+# Justificación: El paso que más tiempo consume es ordenar la lista inicialmente, 
+# lo cual toma O(n log n). Luego, recorrerla toma un tiempo lineal O(n). 
+# La complejidad espacial es O(n) porque creamos una nueva lista para guardar 
+# las respuestas, la cual podría ser del mismo tamaño que la original en el peor caso.
+
+class Solution(object):
+    def merge(self, intervals):
+        # Primero, ordenamos los intervalos basándonos en su punto de inicio
+        # lambda x: x[0] le dice a Python que se fije solo en el primer número de cada par
+        intervals.sort(key=lambda x: x[0])
+        
+        # Esta es nuestra "libreta limpia" donde guardaremos los bloques ya fusionados
+        intervalos_fusionados = []
+        
+        for intervalo_actual in intervals:
+            inicio_actual = intervalo_actual[0]
+            fin_actual = intervalo_actual[1]
+            
+            # Si nuestra libreta está vacía, O si el intervalo actual empieza DESPUÉS 
+            # de que terminó el último intervalo que anotamos, significa que no se tocan.
+            if not intervalos_fusionados or intervalos_fusionados[-1][1] < inicio_actual:
+                # Como no se tocan, simplemente lo anotamos como un bloque nuevo
+                intervalos_fusionados.append(intervalo_actual)
+            else:
+                # Si sí se empalman, "estiramos" el tiempo del último intervalo anotado.
+                # Su nuevo final será el máximo entre el final que ya tenía y el final del actual.
+                ultimo_fin_anotado = intervalos_fusionados[-1][1]
+                intervalos_fusionados[-1][1] = max(ultimo_fin_anotado, fin_actual)
+                
+        return intervalos_fusionados
