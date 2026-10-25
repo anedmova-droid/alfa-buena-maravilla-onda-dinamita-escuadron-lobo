@@ -1,0 +1,43 @@
+# Complejidad temporal: O(n)
+# Complejidad espacial: O(n)
+# Justificación: Usar el "imán" (expresión regular) para sacar los números toma un tiempo 
+# que depende del tamaño del texto, recorriéndolo una sola vez. Guardar esos números 
+# usa memoria proporcional a n. Las operaciones matemáticas son de tiempo constante.
+
+import re
+
+class Solution(object):
+    def fractionAddition(self, expression):
+        # Esta función es nuestro "reductor mágico". 
+        # Encuentra el número más grande por el que podemos dividir arriba y abajo.
+        def encontrar_reductor(num1, num2):
+            while num2 != 0:
+                num1, num2 = num2, num1 % num2
+            return abs(num1)
+        
+        # Pasamos el imán: saca todos los números con su signo y descarta las '/'
+        # Ejemplo: "-1/2+1/3" se convierte en la lista ['-1', '2', '+1', '3']
+        numeros_atrapados = re.findall(r'[+-]?\d+', expression)
+        
+        # Nuestra fracción base comienza en cero (0/1)
+        arriba_total = 0
+        abajo_total = 1
+        
+        # Saltamos de 2 en 2 en nuestra lista, ya que siempre vienen en pares (arriba, abajo)
+        for posicion in range(0, len(numeros_atrapados), 2):
+            arriba_nuevo = int(numeros_atrapados[posicion])
+            abajo_nuevo = int(numeros_atrapados[posicion + 1])
+            
+            # Sumamos usando el método de multiplicar cruzado (A/B + C/D):
+            # Arriba = (A * D) + (C * B)
+            # Abajo = B * D
+            arriba_total = (arriba_total * abajo_nuevo) + (arriba_nuevo * abajo_total)
+            abajo_total = abajo_total * abajo_nuevo
+            
+            # Achicamos la fracción de inmediato para trabajar con números fáciles
+            reductor = encontrar_reductor(arriba_total, abajo_total)
+            arriba_total = arriba_total // reductor
+            abajo_total = abajo_total // reductor
+            
+        # Pegamos los números finales con texto para entregar la respuesta
+        return str(arriba_total) + "/" + str(abajo_total)
