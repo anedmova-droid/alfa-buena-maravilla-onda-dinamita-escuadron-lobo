@@ -1,0 +1,29 @@
+# Complejidad temporal:  push: O(1), pop: O(1) amortizado, peek: O(1) amortizado, empty: O(1)
+# Complejidad espacial: O(n)
+# Justificación:  se usan dos listas como pilas (entrada y salida); cada elemento se inserta 
+# y se remueve de la pila de salida un número constante de veces, lo que resulta en un tiempo O(1) amortizado.
+
+class MyQueue:
+
+    def __init__(self):
+        self.pila_entrada = []
+        self.pila_salida = []
+
+    def push(self, x: int) -> None:
+        self.pila_entrada.append(x)
+
+    def _mover(self) -> None:
+        if not self.pila_salida:
+            while self.pila_entrada:
+                self.pila_salida.append(self.pila_entrada.pop())
+
+    def pop(self) -> int:
+        self._mover()
+        return self.pila_salida.pop()
+
+    def peek(self) -> int:
+        self._mover()
+        return self.pila_salida[-1]
+
+    def empty(self) -> bool:
+        return not self.pila_entrada and not self.pila_salida
